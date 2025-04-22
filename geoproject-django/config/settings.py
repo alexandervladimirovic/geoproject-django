@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     # THIRD PARTY
     
     # MY_APPS
+    "world.apps.WorldConfig",
 ]
 
 
