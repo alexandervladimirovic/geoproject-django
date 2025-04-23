@@ -1,0 +1,55 @@
+services:
+  web:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    container_name: web-django
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - path: ./geoproject-django
+          action: sync+restart
+          target: /app
+        - path: ./uv.lock
+          action: rebuild
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD} 
+    env_file:
+      - .env
+    entrypoint: ["./prestart.sh"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    ports:
+      - 8000:8000
+  
+  db:
+    image: postgis/postgis:latest
+    restart: always
+    shm_size: 128mb
+    container_name: postgres-postgis
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+        test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d
+          ${DB_NAME}'"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+  
+  adminer:
+    image: adminer
+    ports: 
+      - 8080:8080
+
+volumes:
+  postgres_data:
+  
