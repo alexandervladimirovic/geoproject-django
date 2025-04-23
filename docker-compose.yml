@@ -7,6 +7,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     develop:
       watch:
         - path: ./geoproject-django
@@ -23,7 +25,7 @@ services:
 
   db:
     image: postgis/postgis:latest
-    restart: always
+    restart: unless-stopped
     shm_size: 128mb
     container_name: postgres-postgis
     environment:
@@ -37,14 +39,26 @@ services:
     healthcheck:
         test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d
           ${DB_NAME}'"]
-        interval: 30s
-        timeout: 10s
+        interval: 5s
+        timeout: 5s
         retries: 5
   
   adminer:
     image: adminer
     ports: 
       - 8080:8080
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    ports:
+      - 6379:6379
 
 volumes:
   postgres_data:
