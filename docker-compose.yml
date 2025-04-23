@@ -14,17 +14,13 @@ services:
           target: /app
         - path: ./uv.lock
           action: rebuild
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD} 
     env_file:
       - .env
     entrypoint: ["./prestart.sh"]
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
     ports:
       - 8000:8000
-  
+
   db:
     image: postgis/postgis:latest
     restart: always
