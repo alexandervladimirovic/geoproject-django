@@ -3,7 +3,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-DOTENV_PATH = Path(__file__).resolve().parent.parent.parent / '.env'
+DOTENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(DOTENV_PATH)
 
 
@@ -22,9 +22,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # THIRD PARTY
-    
+    "django_celery_beat",
+    "django_celery_results",
     # MY_APPS
     "world.apps.WorldConfig",
 ]
@@ -70,7 +70,7 @@ DATABASES = {
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST", default="db"),
-        "PORT": os.getenv("DB_PORT", default="5432")
+        "PORT": os.getenv("DB_PORT", default="5432"),
     }
 }
 
@@ -101,3 +101,8 @@ STATIC_URL = "/static/"
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# CELERY SETUP
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_RESULT_EXTENDED = True
