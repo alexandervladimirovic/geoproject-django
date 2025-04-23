@@ -179,6 +179,7 @@ name = "geoproject-django"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "celery" },
     { name = "django" },
     { name = "django-celery-beat" },
     { name = "django-celery-results" },
@@ -188,6 +189,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "celery", specifier = ">=5.5.1" },
     { name = "django", specifier = "==5.2" },
     { name = "django-celery-beat", specifier = ">=2.8.0" },
     { name = "django-celery-results", specifier = ">=2.6.0" },
