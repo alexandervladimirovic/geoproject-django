@@ -19,7 +19,7 @@
     poetry install --no-dev  (usage poetry)
     uv sync --no-dev --frozen (usage uv)
 
-4. Define Django secret key and database settings in ~.env.example~ file and ~rename it to .env~
+4. Define Django secret key and database settings in **.env.example** file and **rename it to .env**
 
 ## Usage
 
